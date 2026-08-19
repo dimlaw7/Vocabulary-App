@@ -17,4 +17,4 @@ git config user.name "Your Name"<< without the --global flag for local configura
 ====================================================================================================
 (3) PROBLEM: Solution 1 worked but I could not open my project. The EXPO Go client crashes after loading project at 100%.
 
-(3) SOLUTION: Development builds (https://docs.expo.dev/develop/development-builds/introduction/)
+(3) SOLUTION: I tried to use Development builds (https://docs.expo.dev/develop/development-builds/introduction/) but did not get it. I noticed blank projects did not crash, so I reset the project and removed boilerplate codes.
