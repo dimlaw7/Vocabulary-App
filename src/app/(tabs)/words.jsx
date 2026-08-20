@@ -1,4 +1,4 @@
-import { useFocusEffect } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { useCallback, useState } from "react";
 import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
@@ -55,7 +55,12 @@ export default function WordsScreen() {
           keyExtractor={(item) => item.id.toString()}
           contentContainerStyle={styles.list}
           renderItem={({ item }) => (
-            <Pressable style={styles.wordCard}>
+            <Pressable
+              onPress={() => {
+                router.push(`/word/${item.id}`);
+              }}
+              style={styles.wordCard}
+            >
               <Text style={styles.word}>{item.word}</Text>
 
               <Text style={styles.definition} numberOfLines={2}>
