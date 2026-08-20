@@ -6,7 +6,14 @@ export default function RootLayout() {
   return (
     <SQLiteProvider databaseName="vocabulary.db" onInit={initializeDatabase}>
       <Stack>
-        <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="add-word"
+          options={{
+            title: "Add Word",
+            presentation: "modal",
+          }}
+        />
       </Stack>
     </SQLiteProvider>
   );

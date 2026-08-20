@@ -1,4 +1,4 @@
-export async function CreateWord(db, wordData) {
+export async function createWord(db, wordData) {
   const now = new Date().toISOString();
 
   const result = await db.runAsync(
