@@ -1,5 +1,6 @@
 export async function initializeDatabase(db) {
   await db.execAsync(`
+    PRAGMA foreign_keys = ON;
     PRAGMA journal_mode = WAL;
 
     CREATE TABLE IF NOT EXISTS words (
@@ -20,6 +21,22 @@ export async function initializeDatabase(db) {
 
       created_at TEXT NOT NULL,
       updated_at TEXT NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS reviews (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+      word_id INTEGER NOT NULL,
+
+      result TEXT NOT NULL,
+      hints_used INTEGER NOT NULL DEFAULT 0,
+      response_time_ms INTEGER,
+
+      reviewed_at TEXT NOT NULL,
+
+      FOREIGN KEY (word_id)
+        REFERENCES words(id)
+        ON DELETE CASCADE
     );
   `);
 }
