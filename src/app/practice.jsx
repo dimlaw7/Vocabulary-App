@@ -158,17 +158,23 @@ export default function PracticeScreen() {
         <Text style={styles.buttonText}>Check</Text>
       </Pressable>
 
-      {hintLevel > 0 ? (
-        <View style={styles.hintContainer}>
-          <Text style={styles.hintLabel}>Hint</Text>
+      <>
+        {hintLevel > 0 && (
+          <View style={styles.hintContainer}>
+            <Text style={styles.hintLabel}>Hint</Text>
 
-          <Text style={styles.hint}>{getHintText()}</Text>
-        </View>
-      ) : (
-        <Pressable style={styles.hintButton} onPress={getHint}>
-          <Text style={styles.hintButtonText}>Need a hint?</Text>
-        </Pressable>
-      )}
+            <Text style={styles.hint}>{getHintText()}</Text>
+          </View>
+        )}
+
+        {hintLevel < 2 && (
+          <Pressable style={styles.hintButton} onPress={getHint}>
+            <Text style={styles.hintButtonText}>
+              {hintLevel === 0 ? "Give me a hint" : "Give me another hint"}
+            </Text>
+          </Pressable>
+        )}
+      </>
     </View>
   );
 }
