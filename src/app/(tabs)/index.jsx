@@ -12,6 +12,10 @@ export default function HomeScreen() {
         Build an active vocabulary, one word at a time.
       </Text>
 
+      <Pressable onPress={() => router.push("/practice")} style={styles.button}>
+        <Text style={styles.buttonText}>Start Review</Text>
+      </Pressable>
+
       <Pressable onPress={() => router.push("/add-word")} style={styles.button}>
         <Text style={styles.buttonText}>+ Add Word</Text>
       </Pressable>
@@ -40,6 +44,7 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 10,
     alignItems: "center",
+    marginBottom: 8,
   },
   buttonText: {
     color: "#fff",
