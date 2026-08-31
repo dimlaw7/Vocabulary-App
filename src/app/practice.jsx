@@ -2,7 +2,11 @@ import { useSQLiteContext } from "expo-sqlite";
 import { useEffect, useRef, useState } from "react";
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { createReview } from "../database/reviews";
-import { getWords } from "../database/words";
+import {
+  getWordsForPractice,
+  updateWordLearningState,
+} from "../database/words";
+import { calculateNextReview } from "../services/spacedRepetition";
 
 export default function PracticeScreen() {
   const db = useSQLiteContext();
@@ -23,7 +27,7 @@ export default function PracticeScreen() {
     try {
       setLoading(true);
 
-      const words = await getWords(db);
+      const words = await getWordsForPractice(db);
 
       if (words.length === 0) {
         setWord(null);
@@ -97,6 +101,15 @@ export default function PracticeScreen() {
         hintsUsed: hintLevel,
         responseTimeMs,
       });
+
+      const nextLearningState = calculateNextReview({
+        repetitions: word.repetitions,
+        interval: word.interval,
+        easeFactor: word.ease_factor,
+        result: reviewResult,
+      });
+
+      await updateWordLearningState(db, word.id, nextLearningState);
 
       setResult(reviewResult);
     } catch (error) {

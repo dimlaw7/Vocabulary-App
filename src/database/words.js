@@ -89,3 +89,45 @@ export async function deleteWord(db, id) {
     id,
   );
 }
+
+export async function updateWordLearningState(db, id, learningState) {
+  const now = new Date().toISOString();
+
+  await db.runAsync(
+    `
+      UPDATE words
+      SET
+        repetitions = ?,
+        interval = ?,
+        ease_factor = ?,
+        next_review_at = ?,
+        last_reviewed_at = ?,
+        updated_at = ?
+      WHERE id = ?
+    `,
+    learningState.repetitions,
+    learningState.interval,
+    learningState.easeFactor,
+    learningState.nextReviewAt,
+    now,
+    now,
+    id,
+  );
+}
+
+export async function getWordsForPractice(db) {
+  return await db.getAllAsync(`
+    SELECT *
+    FROM words
+    WHERE
+      next_review_at IS NULL
+      OR next_review_at <= datetime('now')
+    ORDER BY
+      CASE
+        WHEN next_review_at IS NULL THEN 0
+        ELSE 1
+      END,
+      next_review_at ASC,
+      created_at ASC
+  `);
+}
