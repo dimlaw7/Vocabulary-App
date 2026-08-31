@@ -1,3 +1,4 @@
+import { useRouter } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { useEffect, useRef, useState } from "react";
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
@@ -6,6 +7,7 @@ import { getDueWords, updateWordLearningState } from "../database/words";
 import { calculateNextReview } from "../services/spacedRepetition";
 
 export default function PracticeScreen() {
+  const router = useRouter();
   const db = useSQLiteContext();
 
   const [word, setWord] = useState(null);
@@ -125,17 +127,14 @@ export default function PracticeScreen() {
   if (!word) {
     return (
       <View style={styles.center}>
-        <Text style={styles.emptyTitle}>No words yet</Text>
+        <Text style={styles.emptyTitle}>You're all caught up!</Text>
 
         <Text style={styles.emptyText}>
-          Add some words before starting a review.
+          There are no words due for review right now.
         </Text>
 
-        <Pressable
-          style={styles.button}
-          onPress={() => router.push("/add-word")}
-        >
-          <Text style={styles.buttonText}>Add Word</Text>
+        <Pressable style={styles.button} onPress={() => router.back()}>
+          <Text style={styles.buttonText}>Go Back</Text>
         </Pressable>
       </View>
     );
