@@ -131,3 +131,55 @@ export async function getWordsForPractice(db) {
       created_at ASC
   `);
 }
+
+export async function getDueWords(db) {
+  return await db.getAllAsync(
+    `
+    SELECT *
+    FROM words
+    WHERE
+      next_review_at IS NULL
+      OR next_review_at <= ?
+    ORDER BY
+      CASE
+        WHEN next_review_at IS NULL THEN 0
+        ELSE 1
+      END,
+      next_review_at ASC,
+      created_at ASC
+  `,
+    new Date().toISOString(),
+  );
+}
+
+export async function getWordCounts(db) {
+  const now = new Date().toISOString();
+
+  const totalResult = await db.getFirstAsync(`
+    SELECT COUNT(*) AS count
+    FROM words
+  `);
+
+  const dueResult = await db.getFirstAsync(
+    `
+      SELECT COUNT(*) AS count
+      FROM words
+      WHERE
+        next_review_at IS NULL
+        OR next_review_at <= ?
+    `,
+    now,
+  );
+
+  const newResult = await db.getFirstAsync(`
+    SELECT COUNT(*) AS count
+    FROM words
+    WHERE repetitions = 0
+  `);
+
+  return {
+    total: totalResult.count,
+    due: dueResult.count,
+    newWords: newResult.count,
+  };
+}
